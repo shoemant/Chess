@@ -38,6 +38,8 @@ public:
     bool isOccupied(int x, int y) const;
     bool isOccupiedByOpponent(int x, int y, PieceColor color) const;
 
+    bool canCastle(PieceColor color, bool isKingSide) const;
+
     const std::vector<std::unique_ptr<Piece>> &getPieces() const { return pieces; }
 
 private:
@@ -47,6 +49,5 @@ private:
 
     void removePieceAt(int x, int y);
     void capturePieceAt(int x, int y);
-    bool canCastle(PieceColor color, bool isKingSide) const;
     void promotePawn(Piece *pawn);
 };

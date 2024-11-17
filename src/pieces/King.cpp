@@ -1,4 +1,3 @@
-
 #include "King.h"
 #include "../Board.h"
 

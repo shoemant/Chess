@@ -254,7 +254,11 @@ CMakeFiles/chess.dir/src/main.cpp.obj: D:\Chess\ Project\src\main.cpp \
  D:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  D:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
  D:\Chess\ Project\src\Board.h D:\Chess\ Project\src\pieces/Piece.h \
- D:/Chess\ Project/src/Types.h D:\Chess\ Project\src\UIManager.h \
+ D:/Chess\ Project/src/Types.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/iostream \
+ D:/msys64/ucrt64/include/c++/14.2.0/istream \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc \
+ D:/Chess\ Project/src/Utilities.h D:\Chess\ Project\src\UIManager.h \
  D:/msys64/ucrt64/include/c++/14.2.0/functional \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/std_function.h \
  D:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
@@ -264,7 +268,7 @@ CMakeFiles/chess.dir/src/main.cpp.obj: D:\Chess\ Project\src\main.cpp \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
  D:/msys64/ucrt64/include/c++/14.2.0/array \
  D:/msys64/ucrt64/include/c++/14.2.0/compare \
- D:\Chess\ Project\src\AIPlayer.h \
+ D:\Chess\ Project\src\ChessEngine/AIPlayer.h \
  D:/msys64/ucrt64/include/c++/14.2.0/thread \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/std_thread.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/this_thread_sleep.h \
@@ -279,7 +283,4 @@ CMakeFiles/chess.dir/src/main.cpp.obj: D:\Chess\ Project\src\main.cpp \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/unique_lock.h \
  D:/msys64/ucrt64/include/c++/14.2.0/condition_variable \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_futex.h \
- D:/msys64/ucrt64/include/c++/14.2.0/atomic \
- D:/msys64/ucrt64/include/c++/14.2.0/iostream \
- D:/msys64/ucrt64/include/c++/14.2.0/istream \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc
+ D:/msys64/ucrt64/include/c++/14.2.0/atomic

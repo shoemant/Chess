@@ -128,30 +128,6 @@ chess/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/build
 .PHONY : chess/fast
 
-src/AIPlayer.obj: src/AIPlayer.cpp.obj
-.PHONY : src/AIPlayer.obj
-
-# target to build an object file
-src/AIPlayer.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/AIPlayer.cpp.obj
-.PHONY : src/AIPlayer.cpp.obj
-
-src/AIPlayer.i: src/AIPlayer.cpp.i
-.PHONY : src/AIPlayer.i
-
-# target to preprocess a source file
-src/AIPlayer.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/AIPlayer.cpp.i
-.PHONY : src/AIPlayer.cpp.i
-
-src/AIPlayer.s: src/AIPlayer.cpp.s
-.PHONY : src/AIPlayer.s
-
-# target to generate assembly for a file
-src/AIPlayer.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/AIPlayer.cpp.s
-.PHONY : src/AIPlayer.cpp.s
-
 src/Board.obj: src/Board.cpp.obj
 .PHONY : src/Board.obj
 
@@ -175,6 +151,54 @@ src/Board.s: src/Board.cpp.s
 src/Board.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Board.cpp.s
 .PHONY : src/Board.cpp.s
+
+src/ChessEngine/AIPlayer.obj: src/ChessEngine/AIPlayer.cpp.obj
+.PHONY : src/ChessEngine/AIPlayer.obj
+
+# target to build an object file
+src/ChessEngine/AIPlayer.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/AIPlayer.cpp.obj
+.PHONY : src/ChessEngine/AIPlayer.cpp.obj
+
+src/ChessEngine/AIPlayer.i: src/ChessEngine/AIPlayer.cpp.i
+.PHONY : src/ChessEngine/AIPlayer.i
+
+# target to preprocess a source file
+src/ChessEngine/AIPlayer.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/AIPlayer.cpp.i
+.PHONY : src/ChessEngine/AIPlayer.cpp.i
+
+src/ChessEngine/AIPlayer.s: src/ChessEngine/AIPlayer.cpp.s
+.PHONY : src/ChessEngine/AIPlayer.s
+
+# target to generate assembly for a file
+src/ChessEngine/AIPlayer.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/AIPlayer.cpp.s
+.PHONY : src/ChessEngine/AIPlayer.cpp.s
+
+src/ChessEngine/PieceSquareTables.obj: src/ChessEngine/PieceSquareTables.cpp.obj
+.PHONY : src/ChessEngine/PieceSquareTables.obj
+
+# target to build an object file
+src/ChessEngine/PieceSquareTables.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/PieceSquareTables.cpp.obj
+.PHONY : src/ChessEngine/PieceSquareTables.cpp.obj
+
+src/ChessEngine/PieceSquareTables.i: src/ChessEngine/PieceSquareTables.cpp.i
+.PHONY : src/ChessEngine/PieceSquareTables.i
+
+# target to preprocess a source file
+src/ChessEngine/PieceSquareTables.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/PieceSquareTables.cpp.i
+.PHONY : src/ChessEngine/PieceSquareTables.cpp.i
+
+src/ChessEngine/PieceSquareTables.s: src/ChessEngine/PieceSquareTables.cpp.s
+.PHONY : src/ChessEngine/PieceSquareTables.s
+
+# target to generate assembly for a file
+src/ChessEngine/PieceSquareTables.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/ChessEngine/PieceSquareTables.cpp.s
+.PHONY : src/ChessEngine/PieceSquareTables.cpp.s
 
 src/Game.obj: src/Game.cpp.obj
 .PHONY : src/Game.obj
@@ -247,30 +271,6 @@ src/UIManager.s: src/UIManager.cpp.s
 src/UIManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/UIManager.cpp.s
 .PHONY : src/UIManager.cpp.s
-
-src/Utilities.obj: src/Utilities.cpp.obj
-.PHONY : src/Utilities.obj
-
-# target to build an object file
-src/Utilities.cpp.obj:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.obj
-.PHONY : src/Utilities.cpp.obj
-
-src/Utilities.i: src/Utilities.cpp.i
-.PHONY : src/Utilities.i
-
-# target to preprocess a source file
-src/Utilities.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.i
-.PHONY : src/Utilities.cpp.i
-
-src/Utilities.s: src/Utilities.cpp.s
-.PHONY : src/Utilities.s
-
-# target to generate assembly for a file
-src/Utilities.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.s
-.PHONY : src/Utilities.cpp.s
 
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
@@ -473,12 +473,15 @@ help:
 	@echo ... edit_cache
 	@echo ... rebuild_cache
 	@echo ... chess
-	@echo ... src/AIPlayer.obj
-	@echo ... src/AIPlayer.i
-	@echo ... src/AIPlayer.s
 	@echo ... src/Board.obj
 	@echo ... src/Board.i
 	@echo ... src/Board.s
+	@echo ... src/ChessEngine/AIPlayer.obj
+	@echo ... src/ChessEngine/AIPlayer.i
+	@echo ... src/ChessEngine/AIPlayer.s
+	@echo ... src/ChessEngine/PieceSquareTables.obj
+	@echo ... src/ChessEngine/PieceSquareTables.i
+	@echo ... src/ChessEngine/PieceSquareTables.s
 	@echo ... src/Game.obj
 	@echo ... src/Game.i
 	@echo ... src/Game.s
@@ -488,9 +491,6 @@ help:
 	@echo ... src/UIManager.obj
 	@echo ... src/UIManager.i
 	@echo ... src/UIManager.s
-	@echo ... src/Utilities.obj
-	@echo ... src/Utilities.i
-	@echo ... src/Utilities.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

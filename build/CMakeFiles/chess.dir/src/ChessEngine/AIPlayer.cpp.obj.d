@@ -1,6 +1,7 @@
-CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
- D:\Chess\ Project\src\Utilities.cpp D:\Chess\ Project\src\Utilities.h \
- D:/msys64/ucrt64/include/c++/14.2.0/vector \
+CMakeFiles/chess.dir/src/ChessEngine/AIPlayer.cpp.obj: \
+ D:\Chess\ Project\src\ChessEngine\AIPlayer.cpp \
+ D:\Chess\ Project\src\ChessEngine\AIPlayer.h \
+ D:/Chess\ Project/src/Board.h D:/msys64/ucrt64/include/c++/14.2.0/vector \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/requires_hosted.h \
  D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++config.h \
  D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/os_defines.h \
@@ -59,18 +60,15 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/msys64/ucrt64/include/sdks/_mingw_ddk.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/uses_allocator_args.h \
- D:/msys64/ucrt64/include/c++/14.2.0/tuple D:\Chess\ Project\src\Types.h \
- D:\Chess\ Project\src\pieces/Piece.h \
- D:/Chess\ Project/include/SFML/Graphics.hpp \
- D:/Chess\ Project/include/SFML/Window.hpp \
- D:/Chess\ Project/include/SFML/System.hpp \
- D:/Chess\ Project/include/SFML/Config.hpp \
- D:/Chess\ Project/include/SFML/System/Clock.hpp \
- D:/Chess\ Project/include/SFML/System/Export.hpp \
- D:/Chess\ Project/include/SFML/System/Time.hpp \
- D:/Chess\ Project/include/SFML/System/Err.hpp \
- D:/msys64/ucrt64/include/c++/14.2.0/ostream \
- D:/msys64/ucrt64/include/c++/14.2.0/ios \
+ D:/msys64/ucrt64/include/c++/14.2.0/tuple \
+ D:/msys64/ucrt64/include/c++/14.2.0/memory \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tempbuf.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_raw_storage_iter.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/align.h \
+ D:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
+ D:/msys64/ucrt64/include/stdint.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/unique_ptr.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr.h \
  D:/msys64/ucrt64/include/c++/14.2.0/iosfwd \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/stringfwd.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/postypes.h \
@@ -82,20 +80,10 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/msys64/ucrt64/include/_mingw_stat64.h \
  D:/msys64/ucrt64/include/swprintf.inl \
  D:/msys64/ucrt64/include/sec_api/wchar_s.h \
- D:/msys64/ucrt64/include/c++/14.2.0/exception \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/exception_ptr.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/cxxabi_init_exception.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr_base.h \
  D:/msys64/ucrt64/include/c++/14.2.0/typeinfo \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/nested_exception.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/localefwd.h \
- D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++locale.h \
- D:/msys64/ucrt64/include/c++/14.2.0/clocale \
- D:/msys64/ucrt64/include/locale.h D:/msys64/ucrt64/include/stdio.h \
- D:/msys64/ucrt64/include/sec_api/stdio_s.h \
- D:/msys64/ucrt64/include/c++/14.2.0/cctype \
- D:/msys64/ucrt64/include/ctype.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/ios_base.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/allocated_ptr.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/ext/aligned_buffer.h \
  D:/msys64/ucrt64/include/c++/14.2.0/ext/atomicity.h \
  D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/gthr.h \
  D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/gthr-default.h \
@@ -113,6 +101,36 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/msys64/ucrt64/include/pthread_compat.h \
  D:/msys64/ucrt64/include/pthread_unistd.h \
  D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/atomic_word.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/ext/concurrence.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/exception \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/exception_ptr.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/cxxabi_init_exception.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/nested_exception.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr_atomic.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_base.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_lockfree_defines.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
+ D:/Chess\ Project/include/SFML/Graphics.hpp \
+ D:/Chess\ Project/include/SFML/Window.hpp \
+ D:/Chess\ Project/include/SFML/System.hpp \
+ D:/Chess\ Project/include/SFML/Config.hpp \
+ D:/Chess\ Project/include/SFML/System/Clock.hpp \
+ D:/Chess\ Project/include/SFML/System/Export.hpp \
+ D:/Chess\ Project/include/SFML/System/Time.hpp \
+ D:/Chess\ Project/include/SFML/System/Err.hpp \
+ D:/msys64/ucrt64/include/c++/14.2.0/ostream \
+ D:/msys64/ucrt64/include/c++/14.2.0/ios \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/char_traits.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/localefwd.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/x86_64-w64-mingw32/bits/c++locale.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/clocale \
+ D:/msys64/ucrt64/include/locale.h D:/msys64/ucrt64/include/stdio.h \
+ D:/msys64/ucrt64/include/sec_api/stdio_s.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/cctype \
+ D:/msys64/ucrt64/include/ctype.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/ios_base.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/locale_classes.h \
  D:/msys64/ucrt64/include/c++/14.2.0/string \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/ostream_insert.h \
@@ -162,9 +180,7 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/algorithmfwd.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_heap.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/uniform_int_dist.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tempbuf.h \
  D:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_algorithm_defs.h \
- D:/msys64/ucrt64/include/c++/14.2.0/pstl/execution_defs.h \
  D:/msys64/ucrt64/include/c++/14.2.0/locale \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/locale_facets_nonio.h \
  D:/msys64/ucrt64/include/c++/14.2.0/ctime \
@@ -203,8 +219,6 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/Chess\ Project/include/SFML/Window/WindowBase.hpp \
  D:/Chess\ Project/include/SFML/Window/Vulkan.hpp \
  D:/Chess\ Project/include/SFML/Window/WindowHandle.hpp \
- D:/msys64/ucrt64/lib/gcc/x86_64-w64-mingw32/14.2.0/include/stdint.h \
- D:/msys64/ucrt64/include/stdint.h \
  D:/Chess\ Project/include/SFML/Window/WindowStyle.hpp \
  D:/Chess\ Project/include/SFML/Graphics/BlendMode.hpp \
  D:/Chess\ Project/include/SFML/Graphics/Export.hpp \
@@ -227,7 +241,6 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/Chess\ Project/include/SFML/Graphics/Image.hpp \
  D:/msys64/ucrt64/include/c++/14.2.0/map \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_tree.h \
- D:/msys64/ucrt64/include/c++/14.2.0/ext/aligned_buffer.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/node_handle.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_map.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_multimap.h \
@@ -243,16 +256,15 @@ CMakeFiles/chess.dir/src/Utilities.cpp.obj: \
  D:/Chess\ Project/include/SFML/Graphics/Sprite.hpp \
  D:/Chess\ Project/include/SFML/Graphics/Text.hpp \
  D:/Chess\ Project/include/SFML/Graphics/VertexBuffer.hpp \
- D:/msys64/ucrt64/include/c++/14.2.0/memory \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/stl_raw_storage_iter.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/align.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/unique_ptr.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr_base.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/allocated_ptr.h \
- D:/msys64/ucrt64/include/c++/14.2.0/ext/concurrence.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/shared_ptr_atomic.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_base.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_lockfree_defines.h \
- D:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
- D:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h
+ D:/Chess\ Project/src/pieces/Piece.h D:/Chess\ Project/src/Types.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/iostream \
+ D:/msys64/ucrt64/include/c++/14.2.0/istream \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc \
+ D:/Chess\ Project/src/Utilities.h \
+ D:\Chess\ Project\src\ChessEngine\PieceSquareTables.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/limits \
+ D:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable_policy.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h

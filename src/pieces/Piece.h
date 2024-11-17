@@ -1,8 +1,11 @@
-
 #pragma once
+
 #include <SFML/Graphics.hpp>
 #include "../Types.h"
 #include <memory>
+#include <iostream>
+#include "Utilities.h" // Ensure this is included for pieceTypeToString
+
 class Board;
 
 class Piece
@@ -12,6 +15,23 @@ public:
         : x_(x), y_(y), sprite_(sprite), color_(color), hasMoved_(false) {}
 
     virtual ~Piece() = default;
+
+    // Copy constructor
+    Piece(const Piece &other)
+        : x_(other.x_), y_(other.y_), color_(other.color_), type_(other.type_),
+          isSliding_(other.isSliding_), hasMoved_(other.hasMoved_) // Correctly copy hasMoved_
+    {
+        // Recreate the sprite with the same texture and settings
+        sprite_.setTexture(*other.sprite_.getTexture());
+        sprite_.setTextureRect(other.sprite_.getTextureRect());
+        sprite_.setPosition(x_ * 100.f, y_ * 100.f);
+        sprite_.setScale(0.3f, 0.3f);
+
+        // Debug statement to verify hasMoved_ is copied correctly
+        std::cout << "Copying piece: " << pieceTypeToString(type_)
+                  << " at (" << x_ << ", " << y_ << "), hasMoved_ = "
+                  << (hasMoved_ ? "true" : "false") << std::endl;
+    }
 
     int getX() const { return x_; }
     int getY() const { return y_; }
@@ -25,10 +45,12 @@ public:
         y_ = y;
         sprite_.setPosition(x_ * 100.f, y_ * 100.f);
     }
-    void move(int x, int y)
+
+    virtual void move(int x, int y)
     {
         setPosition(x, y);
         hasMoved_ = true;
+        std::cout << pieceTypeToString(type_) << " has moved to (" << x << ", " << y << "), hasMoved_ = " << (hasMoved_ ? "true" : "false") << std::endl;
     }
 
     bool isSlidingPiece() const { return isSliding_; }
@@ -48,5 +70,5 @@ protected:
     PieceColor color_;
     PieceType type_;
     bool isSliding_;
-    bool hasMoved_;
+    bool hasMoved_ = false;
 };

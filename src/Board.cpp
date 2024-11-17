@@ -184,6 +184,10 @@ Piece *Board::getPieceAt(int x, int y) const
 
 std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::pair<Piece *, std::pair<int, int>> &lastMove) const
 {
+    std::cout << "getValidMoves() called for " << pieceTypeToString(piece->getType())
+              << " at (" << piece->getX() << ", " << piece->getY() << "), hasMoved_ = "
+              << (piece->hasMoved() ? "true" : "false") << std::endl;
+
     std::vector<std::pair<int, int>> potentialMoves;
 
     if (!piece)
@@ -193,27 +197,31 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
 
     std::vector<std::pair<int, int>> validMoves;
 
+    // **Handle Castling Exclusively Here**
     if (piece->getType() == PieceType::King && !piece->hasMoved())
     {
-        // king side castle
+        // King-side castling
         if (canCastle(piece->getColor(), true))
         {
+            std::cout << "Adding king-side castling move for " << (piece->getColor() == PieceColor::White ? "White" : "Black") << std::endl;
             validMoves.emplace_back(piece->getX() + 2, piece->getY());
         }
-        // queen side castle
+        // Queen-side castling
         if (canCastle(piece->getColor(), false))
         {
+            std::cout << "Adding queen-side castling move for " << (piece->getColor() == PieceColor::White ? "White" : "Black") << std::endl;
             validMoves.emplace_back(piece->getX() - 2, piece->getY());
         }
     }
 
     if (piece->getType() == PieceType::Pawn)
     {
+        // Existing en passant logic...
         Pawn *pawn = dynamic_cast<Pawn *>(piece);
         int direction = (pawn->getColor() == PieceColor::White) ? -1 : 1;
         int startRank = (pawn->getColor() == PieceColor::White) ? 3 : 4;
 
-        // check if pawn is in correct rank
+        // Check if pawn is in the correct rank for en passant
         if (pawn->getY() == startRank)
         {
             for (int dx = -1; dx <= 1; dx += 2)
@@ -235,6 +243,7 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
         }
     }
 
+    // Validate standard moves
     for (const auto &move : potentialMoves)
     {
         int destX = move.first;
@@ -247,6 +256,7 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
         if (targetPiece && targetPiece->getColor() == piece->getColor())
             continue;
 
+        // Additional castling validation within standard moves
         if (piece->getType() == PieceType::King && !piece->hasMoved())
         {
             int deltaX = destX - piece->getX();
@@ -259,7 +269,6 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
                 Piece *rook = getPieceAt(rookX, destY);
                 if (!rook || rook->getType() != PieceType::Rook || rook->getColor() != piece->getColor() || rook->hasMoved())
                 {
-
                     continue;
                 }
 
@@ -315,31 +324,83 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
     return validMoves;
 }
 
+// In Board.cpp
 bool Board::canCastle(PieceColor color, bool isKingSide) const
 {
+    std::cout << "canCastle() called for " << (color == PieceColor::White ? "White" : "Black")
+              << " " << (isKingSide ? "king-side" : "queen-side") << std::endl;
+
     int row = (color == PieceColor::White) ? 7 : 0;
-    int kingX = 4;
     int rookX = isKingSide ? 7 : 0;
     int direction = isKingSide ? 1 : -1;
 
-    Piece *king = getPieceAt(kingX, row);
-    Piece *rook = getPieceAt(rookX, row);
-
-    if (!king || !rook || king->hasMoved() || rook->hasMoved())
-        return false;
-
-    for (int x = kingX + direction; x != rookX; x += direction)
+    // Find the king's current position
+    Piece *king = nullptr;
+    for (const auto &p : pieces)
     {
-        if (isOccupied(x, row))
-            return false;
+        if (p->getType() == PieceType::King && p->getColor() == color)
+        {
+            king = p.get();
+            break;
+        }
+    }
+    if (!king)
+    {
+        std::cout << "Cannot castle: King not found for " << (color == PieceColor::White ? "White" : "Black") << ".\n";
+        return false;
     }
 
+    // Find the rook at the expected position
+    Piece *rook = getPieceAt(rookX, row);
+    if (!rook || rook->getType() != PieceType::Rook || rook->getColor() != color)
+    {
+        std::cout << "Cannot castle: Rook not found at expected position for " << (color == PieceColor::White ? "White" : "Black") << ".\n";
+        return false;
+    }
+
+    // Both king and rook must not have moved
+    if (king->hasMoved() || rook->hasMoved())
+    {
+        std::cout << "Cannot castle " << (isKingSide ? "king-side" : "queen-side")
+                  << " for " << (color == PieceColor::White ? "White" : "Black")
+                  << ". Either king or rook has moved.\n";
+        return false;
+    }
+
+    // Squares between king and rook must be empty
+    for (int x = king->getX() + direction; x != rookX; x += direction)
+    {
+        if (isOccupied(x, row))
+        {
+            std::cout << "Cannot castle " << (isKingSide ? "king-side" : "queen-side")
+                      << " for " << (color == PieceColor::White ? "White" : "Black")
+                      << ". Path is not clear at (" << x << ", " << row << ").\n";
+            return false;
+        }
+    }
+
+    // King must not be in check or pass through attacked squares
     if (isKingInCheck(color))
+    {
+        std::cout << "Cannot castle " << (isKingSide ? "king-side" : "queen-side")
+                  << " for " << (color == PieceColor::White ? "White" : "Black")
+                  << ". King is currently in check.\n";
         return false;
-    if (isSquareUnderAttack(kingX + direction, row, color))
-        return false;
-    if (isSquareUnderAttack(kingX + 2 * direction, row, color))
-        return false;
+    }
+    for (int i = 0; i <= 2; ++i)
+    {
+        int x = king->getX() + i * direction;
+        if (isSquareUnderAttack(x, row, color))
+        {
+            std::cout << "Cannot castle " << (isKingSide ? "king-side" : "queen-side")
+                      << " for " << (color == PieceColor::White ? "White" : "Black")
+                      << ". Square (" << x << ", " << row << ") is under attack.\n";
+            return false;
+        }
+    }
+
+    std::cout << "Castling " << (isKingSide ? "king-side" : "queen-side")
+              << " is possible for " << (color == PieceColor::White ? "White" : "Black") << ".\n";
 
     return true;
 }
@@ -379,6 +440,7 @@ void Board::movePiece(Piece *piece, int endX, int endY, bool enPassant, bool cas
 
     if (castling)
     {
+        std::cout << "Executing castling move.\n";
         King *king = dynamic_cast<King *>(piece);
         if (!king)
             throw std::invalid_argument("Only kings can perform castling.");
@@ -392,9 +454,12 @@ void Board::movePiece(Piece *piece, int endX, int endY, bool enPassant, bool cas
         {
             rook->move(rookNewX, king->getY());
             rook->setHasMoved(true);
+
+            std::cout << "Castling executed: King moved to (" << endX << ", " << endY << "), Rook moved to (" << rookNewX << ", " << king->getY() << ")\n";
         }
         else
         {
+            std::cerr << "Cannot castle: Rook not found or has moved." << std::endl;
             throw std::logic_error("Rook not found or has already moved for castling.");
         }
     }

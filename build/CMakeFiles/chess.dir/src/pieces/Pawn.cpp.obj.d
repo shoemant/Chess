@@ -255,4 +255,7 @@ CMakeFiles/chess.dir/src/pieces/Pawn.cpp.obj: \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/atomic_lockfree_defines.h \
  D:/msys64/ucrt64/include/c++/14.2.0/backward/auto_ptr.h \
  D:/msys64/ucrt64/include/c++/14.2.0/pstl/glue_memory_defs.h \
- D:/Chess\ Project/src/Board.h
+ D:/msys64/ucrt64/include/c++/14.2.0/iostream \
+ D:/msys64/ucrt64/include/c++/14.2.0/istream \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc \
+ D:/Chess\ Project/src/Utilities.h D:/Chess\ Project/src/Board.h

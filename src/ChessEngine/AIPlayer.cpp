@@ -1,120 +1,105 @@
 #include "AIPlayer.h"
+#include "PieceSquareTables.h"
 #include <limits>
 #include <algorithm>
 #include <unordered_map>
+#include <iostream>
+#include "Utilities.h"
 
 AIPlayer::AIPlayer(PieceColor aiColor)
-    : aiColor_(aiColor), maxDepth_(3)
+    : aiColor_(aiColor), maxDepth_(5)
 {
 }
 
-// piece square tables taken from https://github.com/terredeciels/TSCP/blob/master/eval.c
-
-const int pawnTable[8][8] = {
-    {0, 0, 0, 0, 0, 0, 0, 0},
-    {5, 10, 15, 20, 20, 15, 10, 5},
-    {4, 8, 12, 16, 16, 12, 8, 4},
-    {3, 6, 9, 12, 12, 9, 6, 3},
-    {2, 4, 6, 8, 8, 6, 4, 2},
-    {1, 2, 3, -10, -10, 3, 2, 1},
-    {0, 0, 0, -40, -40, 0, 0, 0},
-    {0, 0, 0, 0, 0, 0, 0, 0}};
-const int rookTable[8][8] = {
-    {32, 42, 32, 51, 63, 9, 31, 43},
-    {27, 32, 58, 62, 80, 67, 26, 44},
-    {-5, 19, 26, 36, 17, 45, 61, 16},
-    {-24, -11, 7, 26, 24, 35, -8, -20},
-    {-36, -26, -12, -1, 9, -7, 6, -23},
-    {-45, -25, -16, -17, 3, 0, -5, -33},
-    {-44, -16, -20, -9, -1, 11, -6, -71},
-    {-19, -13, 1, 17, 16, 7, -37, -26}};
-
-const int knightTable[8][8] = {
-    {-10, -10, -10, -10, -10, -10, -10, -10},
-    {-10, 0, 0, 0, 0, 0, 0, -10},
-    {-10, 0, 5, 5, 5, 5, 0, -10},
-    {-10, 0, 5, 10, 10, 5, 0, -10},
-    {-10, 0, 5, 10, 10, 5, 0, -10},
-    {-10, 0, 5, 5, 5, 5, 0, -10},
-    {-10, 0, 0, 0, 0, 0, 0, -10},
-    {-10, -30, -10, -10, -10, -10, -30, -10}};
-
-const int bishopTable[8][8] = {
-    {-10, -10, -10, -10, -10, -10, -10, -10},
-    {-10, 0, 0, 0, 0, 0, 0, -10},
-    {-10, 0, 5, 5, 5, 5, 0, -10},
-    {-10, 0, 5, 10, 10, 5, 0, -10},
-    {-10, 0, 5, 10, 10, 5, 0, -10},
-    {-10, 0, 5, 5, 5, 5, 0, -10},
-    {-10, 0, 0, 0, 0, 0, 0, -10},
-    {-10, -10, -20, -10, -10, -20, -10, -10}};
-
-const int kingTable[8][8] = {
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-40, -40, -40, -40, -40, -40, -40, -40},
-    {-20, -20, -20, -20, -20, -20, -20, -20},
-    {0, 20, 40, -20, 0, -20, 40, 20}};
-
-const int queenTable[8][8] = {
-    {-20, -10, -10, -5, -5, -10, -10, -20},
-    {-10, 0, 0, 0, 0, 0, 0, -10},
-    {-10, 0, 5, 5, 5, 5, 0, -10},
-    {-5, 0, 5, 5, 5, 5, 0, -5},
-    {0, 0, 5, 5, 5, 5, 0, 0},
-    {-10, 5, 5, 5, 5, 5, 0, -10},
-    {-10, 0, 5, 0, 0, 0, 0, -10},
-    {-20, -10, -10, -5, -5, -10, -10, -20}};
-
-std::pair<Piece *, std::pair<int, int>>
-AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove)
+std::pair<Piece *, std::pair<int, int>> AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     int bestValue = std::numeric_limits<int>::min();
     std::pair<Piece *, std::pair<int, int>> bestMove = {nullptr, {-1, -1}};
 
-    // all possible moves for AI
     auto possibleMoves = getAllPossibleMoves(board, aiColor_, lastMove);
+
+    std::cout << "AI is evaluating " << possibleMoves.size() << " possible moves.\n";
 
     for (auto &move : possibleMoves)
     {
-        // copy of board to simulate move
+        Piece *piece = move.first;
+        int destX = move.second.first;
+        int destY = move.second.second;
+
+        std::cout << "AI considering move: " << pieceTypeToString(piece->getType())
+                  << " from (" << piece->getX() << ", " << piece->getY() << ") to ("
+                  << destX << ", " << destY << "), hasMoved_ = "
+                  << (piece->hasMoved() ? "true" : "false") << std::endl;
+
+        bool isCastling = false;
+        if (piece->getType() == PieceType::King && std::abs(destX - piece->getX()) == 2 && destY == piece->getY())
+        {
+            isCastling = true;
+            std::cout << "AI considers castling move.\n";
+        }
+
         Board tempBoard = board;
         Piece *tempPiece = tempBoard.getPieceAt(move.first->getX(), move.first->getY());
-        tempBoard.movePiece(tempPiece, move.second.first, move.second.second, false, false);
 
-        // evaluate game using negamax
+        tempBoard.movePiece(tempPiece, destX, destY, false, isCastling);
+
         int moveValue = -negamax(tempBoard, maxDepth_ - 1, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), -1, lastMove);
+
+        std::cout << "Move value: " << moveValue << std::endl;
 
         if (moveValue > bestValue)
         {
             bestValue = moveValue;
             bestMove = move;
+            if (isCastling)
+                std::cout << "AI selects castling move.\n";
         }
     }
 
+    std::cout << "AI selected move: " << (bestMove.first ? pieceTypeToString(bestMove.first->getType()) : "None")
+              << " to (" << bestMove.second.first << ", " << bestMove.second.second << ")\n";
+
     return bestMove;
 }
-
 int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMultiplier, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
-    if (depth == 0 || board.isInsufficientMaterial() || !board.hasValidMoves(PieceColor::White) || !board.hasValidMoves(PieceColor::Black))
+    PieceColor currentColor = (colorMultiplier == 1) ? aiColor_ : (aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White);
+
+    if (depth == 0 || board.isInsufficientMaterial())
     {
         return colorMultiplier * evaluateBoard(board);
     }
 
+    if (!board.hasValidMoves(currentColor))
+    {
+        if (board.isKingInCheck(currentColor))
+        {
+            return -100000 + depth;
+        }
+        else
+        {
+            return 0;
+        }
+    }
+
     int maxEval = std::numeric_limits<int>::min();
-    auto possibleMoves = getAllPossibleMoves(board, colorMultiplier == 1 ? aiColor_ : (aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White), lastMove);
+    auto possibleMoves = getAllPossibleMoves(board, currentColor, lastMove);
 
     for (auto &move : possibleMoves)
     {
         Board tempBoard = board;
         Piece *tempPiece = tempBoard.getPieceAt(move.first->getX(), move.first->getY());
-        tempBoard.movePiece(tempPiece, move.second.first, move.second.second, false, false);
+
+        bool isCastling = false;
+        if (tempPiece->getType() == PieceType::King && std::abs(move.second.first - tempPiece->getX()) == 2)
+        {
+            isCastling = true;
+        }
+
+        tempBoard.movePiece(tempPiece, move.second.first, move.second.second, false, isCastling);
 
         int eval = -negamax(tempBoard, depth - 1, -beta, -alpha, -colorMultiplier, lastMove);
+
         maxEval = std::max(maxEval, eval);
         alpha = std::max(alpha, eval);
 
@@ -152,22 +137,22 @@ int AIPlayer::evaluateBoard(const Board &board)
         switch (piece->getType())
         {
         case PieceType::Pawn:
-            positionValue = pawnTable[y][x];
+            positionValue = PieceSquareTables::pawnTable[y][x];
             break;
         case PieceType::Knight:
-            positionValue = knightTable[y][x];
+            positionValue = PieceSquareTables::knightTable[y][x];
             break;
         case PieceType::Bishop:
-            positionValue = bishopTable[y][x];
+            positionValue = PieceSquareTables::bishopTable[y][x];
             break;
         case PieceType::Rook:
-            positionValue = rookTable[y][x];
+            positionValue = PieceSquareTables::rookTable[y][x];
             break;
         case PieceType::Queen:
-            positionValue = queenTable[y][x];
+            positionValue = PieceSquareTables::queenTable[y][x];
             break;
         case PieceType::King:
-            positionValue = kingTable[y][x];
+            positionValue = PieceSquareTables::kingTable[y][x];
             break;
         }
 

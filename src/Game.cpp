@@ -35,11 +35,19 @@ void Game::run()
 
 void Game::update()
 {
-
     if (aiMoveInProgress && aiFutureMove.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
     {
         auto bestMove = aiFutureMove.get();
-        board.movePiece(bestMove.first, bestMove.second.first, bestMove.second.second, false, false);
+
+        bool isCastling = false;
+        if (bestMove.first->getType() == PieceType::King && std::abs(bestMove.second.first - bestMove.first->getX()) == 2)
+        {
+            isCastling = true;
+            std::cout << "AI is attempting to castle.\n";
+        }
+
+        board.movePiece(bestMove.first, bestMove.second.first, bestMove.second.second, false, isCastling);
+
         lastMove = bestMove;
         aiMoveInProgress = false;
 

@@ -15,4 +15,8 @@ public:
     virtual std::vector<std::pair<int, int>> getPotentialMoves(const Board &board) const override;
 
     virtual std::unique_ptr<Piece> clone() const override;
+
+    Rook(const Rook &other) : Piece(other)
+    {
+    }
 };

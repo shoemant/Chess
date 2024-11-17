@@ -255,17 +255,17 @@ CMakeFiles/chess.dir/src/Board.cpp.obj: D:\Chess\ Project\src\Board.cpp \
  D:/Chess\ Project/include/SFML/Graphics/Text.hpp \
  D:/Chess\ Project/include/SFML/Graphics/VertexBuffer.hpp \
  D:\Chess\ Project\src\pieces/Piece.h D:/Chess\ Project/src/Types.h \
- D:\Chess\ Project\src\pieces/King.h D:\Chess\ Project\src\pieces/Queen.h \
+ D:/msys64/ucrt64/include/c++/14.2.0/iostream \
+ D:/msys64/ucrt64/include/c++/14.2.0/istream \
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc \
+ D:/Chess\ Project/src/Utilities.h D:\Chess\ Project\src\pieces/King.h \
+ D:\Chess\ Project\src\pieces/Queen.h \
  D:\Chess\ Project\src\pieces/Bishop.h \
  D:\Chess\ Project\src\pieces/Knight.h \
  D:\Chess\ Project\src\pieces/Rook.h D:\Chess\ Project\src\pieces/Pawn.h \
- D:\Chess\ Project\src\Utilities.h \
  D:\Chess\ Project\src\ResourceManager/ResourceManager.h \
  D:/msys64/ucrt64/include/c++/14.2.0/unordered_map \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/unordered_map.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable.h \
  D:/msys64/ucrt64/include/c++/14.2.0/bits/hashtable_policy.h \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h \
- D:/msys64/ucrt64/include/c++/14.2.0/iostream \
- D:/msys64/ucrt64/include/c++/14.2.0/istream \
- D:/msys64/ucrt64/include/c++/14.2.0/bits/istream.tcc
+ D:/msys64/ucrt64/include/c++/14.2.0/bits/enable_special_members.h

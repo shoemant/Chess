@@ -6,7 +6,7 @@
 #include "Board.h"
 #include "UIManager.h"
 #include "pieces/Piece.h"
-#include "AIPlayer.h"
+#include "ChessEngine/AIPlayer.h"
 #include <thread>
 #include <future>
 
