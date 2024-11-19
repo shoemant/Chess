@@ -272,6 +272,30 @@ src/UIManager.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/UIManager.cpp.s
 .PHONY : src/UIManager.cpp.s
 
+src/Utilities.obj: src/Utilities.cpp.obj
+.PHONY : src/Utilities.obj
+
+# target to build an object file
+src/Utilities.cpp.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.obj
+.PHONY : src/Utilities.cpp.obj
+
+src/Utilities.i: src/Utilities.cpp.i
+.PHONY : src/Utilities.i
+
+# target to preprocess a source file
+src/Utilities.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.i
+.PHONY : src/Utilities.cpp.i
+
+src/Utilities.s: src/Utilities.cpp.s
+.PHONY : src/Utilities.s
+
+# target to generate assembly for a file
+src/Utilities.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\chess.dir\build.make CMakeFiles/chess.dir/src/Utilities.cpp.s
+.PHONY : src/Utilities.cpp.s
+
 src/main.obj: src/main.cpp.obj
 .PHONY : src/main.obj
 
@@ -491,6 +515,9 @@ help:
 	@echo ... src/UIManager.obj
 	@echo ... src/UIManager.i
 	@echo ... src/UIManager.s
+	@echo ... src/Utilities.obj
+	@echo ... src/Utilities.i
+	@echo ... src/Utilities.s
 	@echo ... src/main.obj
 	@echo ... src/main.i
 	@echo ... src/main.s

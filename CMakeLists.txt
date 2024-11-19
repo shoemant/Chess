@@ -14,8 +14,12 @@ add_executable(chess ${SOURCE_FILES})
 
 include_directories(include src)
 
+set(CMAKE_BUILD_TYPE Debug)
+
 find_package(SFML 2.5 COMPONENTS system window graphics REQUIRED)
 target_link_libraries(chess sfml-system sfml-window sfml-graphics)
+
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
 set(ASSETS_PATH "${CMAKE_SOURCE_DIR}/assets")

@@ -26,11 +26,6 @@ public:
         sprite_.setTextureRect(other.sprite_.getTextureRect());
         sprite_.setPosition(x_ * 100.f, y_ * 100.f);
         sprite_.setScale(0.3f, 0.3f);
-
-        // Debug statement to verify hasMoved_ is copied correctly
-        std::cout << "Copying piece: " << pieceTypeToString(type_)
-                  << " at (" << x_ << ", " << y_ << "), hasMoved_ = "
-                  << (hasMoved_ ? "true" : "false") << std::endl;
     }
 
     int getX() const { return x_; }

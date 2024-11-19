@@ -11,6 +11,8 @@ file(REMOVE_RECURSE
   "CMakeFiles/chess.dir/src/ResourceManager/ResourceManager.cpp.obj.d"
   "CMakeFiles/chess.dir/src/UIManager.cpp.obj"
   "CMakeFiles/chess.dir/src/UIManager.cpp.obj.d"
+  "CMakeFiles/chess.dir/src/Utilities.cpp.obj"
+  "CMakeFiles/chess.dir/src/Utilities.cpp.obj.d"
   "CMakeFiles/chess.dir/src/main.cpp.obj"
   "CMakeFiles/chess.dir/src/main.cpp.obj.d"
   "CMakeFiles/chess.dir/src/pieces/Bishop.cpp.obj"

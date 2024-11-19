@@ -14,6 +14,7 @@ set(CMAKE_DEPENDS_DEPENDENCY_FILES
   "D:/Chess Project/src/Game.cpp" "CMakeFiles/chess.dir/src/Game.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/Game.cpp.obj.d"
   "D:/Chess Project/src/ResourceManager/ResourceManager.cpp" "CMakeFiles/chess.dir/src/ResourceManager/ResourceManager.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/ResourceManager/ResourceManager.cpp.obj.d"
   "D:/Chess Project/src/UIManager.cpp" "CMakeFiles/chess.dir/src/UIManager.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/UIManager.cpp.obj.d"
+  "D:/Chess Project/src/Utilities.cpp" "CMakeFiles/chess.dir/src/Utilities.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/Utilities.cpp.obj.d"
   "D:/Chess Project/src/main.cpp" "CMakeFiles/chess.dir/src/main.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/main.cpp.obj.d"
   "D:/Chess Project/src/pieces/Bishop.cpp" "CMakeFiles/chess.dir/src/pieces/Bishop.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/pieces/Bishop.cpp.obj.d"
   "D:/Chess Project/src/pieces/King.cpp" "CMakeFiles/chess.dir/src/pieces/King.cpp.obj" "gcc" "CMakeFiles/chess.dir/src/pieces/King.cpp.obj.d"

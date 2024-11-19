@@ -1,13 +1,24 @@
+// In AIPlayer.h
 #pragma once
 #include "Board.h"
 #include "Types.h"
+
+struct Move
+{
+    int startX, startY;
+    int endX, endY;
+    PieceType pieceType;
+    PieceColor pieceColor;
+    bool isPromotion;
+    bool isCapture;
+};
 
 class AIPlayer
 {
 public:
     AIPlayer(PieceColor aiColor);
 
-    std::pair<Piece *, std::pair<int, int>> getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove);
+    Move getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove);
 
 private:
     PieceColor aiColor_;
@@ -17,5 +28,9 @@ private:
 
     int evaluateBoard(const Board &board);
 
-    std::vector<std::pair<Piece *, std::pair<int, int>>> getAllPossibleMoves(Board &board, PieceColor color, const std::pair<Piece *, std::pair<int, int>> &lastMove);
+    std::vector<Move> getAllPossibleMoves(Board &board, PieceColor color, const std::pair<Piece *, std::pair<int, int>> &lastMove);
+
+    int moveOrderingHeuristic(const Move &move);
+
+    int evaluateKingSafety(const Board &board, PieceColor color);
 };

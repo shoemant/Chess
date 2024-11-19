@@ -37,18 +37,26 @@ void Game::update()
 {
     if (aiMoveInProgress && aiFutureMove.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
     {
-        auto bestMove = aiFutureMove.get();
+        Move bestMove = aiFutureMove.get();
+
+        Piece *pieceToMove = board.getPieceAt(bestMove.startX, bestMove.startY);
+        if (!pieceToMove)
+        {
+            std::cerr << "Failed to find the piece to move at the expected position." << std::endl;
+            aiMoveInProgress = false;
+            return;
+        }
 
         bool isCastling = false;
-        if (bestMove.first->getType() == PieceType::King && std::abs(bestMove.second.first - bestMove.first->getX()) == 2)
+        if (pieceToMove->getType() == PieceType::King && std::abs(bestMove.endX - bestMove.startX) == 2)
         {
             isCastling = true;
             std::cout << "AI is attempting to castle.\n";
         }
 
-        board.movePiece(bestMove.first, bestMove.second.first, bestMove.second.second, false, isCastling);
+        board.movePiece(pieceToMove, bestMove.endX, bestMove.endY, false, isCastling);
 
-        lastMove = bestMove;
+        lastMove = {pieceToMove, {bestMove.endX, bestMove.endY}};
         aiMoveInProgress = false;
 
         if (board.isKingInCheck(PieceColor::White) && !board.hasValidMoves(PieceColor::White))
@@ -271,53 +279,24 @@ void Game::toChessNotation(Piece *selectedPiece, int boardX, int boardY)
 
 void Game::handleAIMove()
 {
-
     auto bestMove = aiPlayer_.getBestMove(board, lastMove);
 
-    if (bestMove.first != nullptr)
+    Piece *pieceToMove = board.getPieceAt(bestMove.startX, bestMove.startY);
+    if (!pieceToMove)
     {
-
-        try
-        {
-
-            bool enPassant = false;
-            bool castling = false;
-
-            if (Pawn *pawn = dynamic_cast<Pawn *>(bestMove.first))
-            {
-                int direction = (pawn->getColor() == PieceColor::White) ? -1 : 1;
-                if (bestMove.second.second == pawn->getY() + direction && std::abs(bestMove.second.first - pawn->getX()) == 1)
-                {
-                    Piece *target = board.getPieceAt(bestMove.second.first, bestMove.second.second);
-                    if (!target)
-                    {
-                        enPassant = true;
-                    }
-                }
-            }
-
-            if (King *king = dynamic_cast<King *>(bestMove.first))
-            {
-                int dx = bestMove.second.first - king->getX();
-                if (std::abs(dx) == 2)
-                {
-                    castling = true;
-                }
-            }
-
-            board.movePiece(bestMove.first, bestMove.second.first, bestMove.second.second, enPassant, castling);
-
-            lastMove = {bestMove.first, bestMove.second};
-
-            currentTurn = (currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
-        }
-        catch (const std::exception &e)
-        {
-            std::cerr << "Error during AI move: " << e.what() << std::endl;
-        }
+        std::cerr << "Failed to find the piece to move at the expected position." << std::endl;
+        return;
     }
-    else
+
+    bool isCastling = false;
+    if (pieceToMove->getType() == PieceType::King && std::abs(bestMove.endX - bestMove.startX) == 2)
     {
-        std::cerr << "AI has no valid moves!" << std::endl;
+        isCastling = true;
     }
+
+    board.movePiece(pieceToMove, bestMove.endX, bestMove.endY, false, isCastling);
+
+    lastMove = {pieceToMove, {bestMove.endX, bestMove.endY}};
+
+    currentTurn = (currentTurn == PieceColor::White) ? PieceColor::Black : PieceColor::White;
 }

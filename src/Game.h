@@ -29,7 +29,7 @@ private:
 
     void update();
 
-    std::future<std::pair<Piece *, std::pair<int, int>>> aiFutureMove;
+    std::future<Move> aiFutureMove;
     bool aiMoveInProgress = false;
 
     AIPlayer aiPlayer_;

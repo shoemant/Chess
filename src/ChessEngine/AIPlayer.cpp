@@ -7,60 +7,37 @@
 #include "Utilities.h"
 
 AIPlayer::AIPlayer(PieceColor aiColor)
-    : aiColor_(aiColor), maxDepth_(5)
+    : aiColor_(aiColor), maxDepth_(7)
 {
 }
 
-std::pair<Piece *, std::pair<int, int>> AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove)
+Move AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     int bestValue = std::numeric_limits<int>::min();
-    std::pair<Piece *, std::pair<int, int>> bestMove = {nullptr, {-1, -1}};
+    Move bestMove;
 
     auto possibleMoves = getAllPossibleMoves(board, aiColor_, lastMove);
 
-    std::cout << "AI is evaluating " << possibleMoves.size() << " possible moves.\n";
-
     for (auto &move : possibleMoves)
     {
-        Piece *piece = move.first;
-        int destX = move.second.first;
-        int destY = move.second.second;
-
-        std::cout << "AI considering move: " << pieceTypeToString(piece->getType())
-                  << " from (" << piece->getX() << ", " << piece->getY() << ") to ("
-                  << destX << ", " << destY << "), hasMoved_ = "
-                  << (piece->hasMoved() ? "true" : "false") << std::endl;
-
-        bool isCastling = false;
-        if (piece->getType() == PieceType::King && std::abs(destX - piece->getX()) == 2 && destY == piece->getY())
-        {
-            isCastling = true;
-            std::cout << "AI considers castling move.\n";
-        }
-
         Board tempBoard = board;
-        Piece *tempPiece = tempBoard.getPieceAt(move.first->getX(), move.first->getY());
+        Piece *tempPiece = tempBoard.getPieceAt(move.startX, move.startY);
+        bool isCastling = (move.pieceType == PieceType::King && std::abs(move.endX - move.startX) == 2);
 
-        tempBoard.movePiece(tempPiece, destX, destY, false, isCastling);
+        tempBoard.movePiece(tempPiece, move.endX, move.endY, false, isCastling);
 
         int moveValue = -negamax(tempBoard, maxDepth_ - 1, std::numeric_limits<int>::min(), std::numeric_limits<int>::max(), -1, lastMove);
-
-        std::cout << "Move value: " << moveValue << std::endl;
 
         if (moveValue > bestValue)
         {
             bestValue = moveValue;
             bestMove = move;
-            if (isCastling)
-                std::cout << "AI selects castling move.\n";
         }
     }
 
-    std::cout << "AI selected move: " << (bestMove.first ? pieceTypeToString(bestMove.first->getType()) : "None")
-              << " to (" << bestMove.second.first << ", " << bestMove.second.second << ")\n";
-
     return bestMove;
 }
+
 int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMultiplier, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     PieceColor currentColor = (colorMultiplier == 1) ? aiColor_ : (aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White);
@@ -85,18 +62,29 @@ int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMul
     int maxEval = std::numeric_limits<int>::min();
     auto possibleMoves = getAllPossibleMoves(board, currentColor, lastMove);
 
+    sort(possibleMoves.begin(), possibleMoves.end(), [this](const Move &a, const Move &b)
+         {
+             int scoreA = moveOrderingHeuristic(a);
+             int scoreB = moveOrderingHeuristic(b);
+             return scoreA > scoreB; });
+
     for (auto &move : possibleMoves)
     {
         Board tempBoard = board;
-        Piece *tempPiece = tempBoard.getPieceAt(move.first->getX(), move.first->getY());
+        Piece *tempPiece = tempBoard.getPieceAt(move.startX, move.startY);
+        if (!tempPiece)
+        {
+
+            continue;
+        }
 
         bool isCastling = false;
-        if (tempPiece->getType() == PieceType::King && std::abs(move.second.first - tempPiece->getX()) == 2)
+        if (move.pieceType == PieceType::King && std::abs(move.endX - move.startX) == 2)
         {
             isCastling = true;
         }
 
-        tempBoard.movePiece(tempPiece, move.second.first, move.second.second, false, isCastling);
+        tempBoard.movePiece(tempPiece, move.endX, move.endY, false, isCastling);
 
         int eval = -negamax(tempBoard, depth - 1, -beta, -alpha, -colorMultiplier, lastMove);
 
@@ -106,7 +94,24 @@ int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMul
         if (alpha >= beta)
             break;
     }
+
     return maxEval;
+}
+
+int AIPlayer::moveOrderingHeuristic(const Move &move)
+{
+    int score = 0;
+
+    if (move.isCapture)
+        score += 1000;
+
+    if (move.pieceType == PieceType::King && std::abs(move.endX - move.startX) == 2)
+        score += 900;
+
+    if (move.isPromotion)
+        score += 800;
+
+    return score;
 }
 
 int AIPlayer::evaluateBoard(const Board &board)
@@ -164,15 +169,84 @@ int AIPlayer::evaluateBoard(const Board &board)
         {
             score -= value + positionValue;
         }
+
+        if (piece->getType() == PieceType::King)
+        {
+            if (!piece->hasMoved())
+            {
+                if (piece->getColor() == aiColor_)
+                {
+                    score -= 30;
+                }
+                else
+                {
+                    score += 30;
+                }
+            }
+        }
+
+        if (piece->getType() == PieceType::King)
+        {
+            if (piece->hasMoved())
+            {
+                int kingX = piece->getX();
+                int kingY = piece->getY();
+
+                bool castledPosition = (kingX == 6 || kingX == 2) && (kingY == 0 || kingY == 7);
+                if (castledPosition)
+                {
+                    if (piece->getColor() == aiColor_)
+                    {
+                        score += 50;
+                    }
+                    else
+                    {
+                        score -= 50;
+                    }
+                }
+            }
+        }
     }
+
+    score += evaluateKingSafety(board, aiColor_);
+    score -= evaluateKingSafety(board, aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White);
 
     return score;
 }
-
-std::vector<std::pair<Piece *, std::pair<int, int>>> AIPlayer::getAllPossibleMoves(Board &board, PieceColor color, const std::pair<Piece *, std::pair<int, int>> &lastMove)
+int AIPlayer::evaluateKingSafety(const Board &board, PieceColor color)
 {
-    std::vector<std::pair<Piece *, std::pair<int, int>>> moves;
+    int safetyScore = 0;
+    Piece *king = nullptr;
 
+    for (const auto &piece : board.getPieces())
+    {
+        if (piece->getType() == PieceType::King && piece->getColor() == color)
+        {
+            king = piece.get();
+            break;
+        }
+    }
+
+    if (!king)
+        return safetyScore;
+
+    int kingX = king->getX();
+    int kingY = king->getY();
+
+    if (kingY < 2 || kingY > 5)
+        safetyScore += 20;
+    else
+        safetyScore -= 20;
+
+    if (!king->hasMoved())
+        safetyScore -= 50;
+
+    return safetyScore;
+}
+
+std::vector<Move> AIPlayer::getAllPossibleMoves(Board &board, PieceColor color, const std::pair<Piece *, std::pair<int, int>> &lastMove)
+{
+    std::vector<Move> moves;
     for (const auto &piece : board.getPieces())
     {
         if (piece->getColor() == color)
@@ -180,10 +254,33 @@ std::vector<std::pair<Piece *, std::pair<int, int>>> AIPlayer::getAllPossibleMov
             auto validMoves = board.getValidMoves(piece.get(), lastMove);
             for (const auto &move : validMoves)
             {
-                moves.emplace_back(piece.get(), move);
+                if (piece->getType() == PieceType::King && !piece->hasMoved())
+                {
+                    int dx = move.first - piece->getX();
+                    int dy = move.second - piece->getY();
+
+                    if (dy == 0 && std::abs(dx) == 1)
+                    {
+                        if (board.canCastle(color, dx > 0))
+                            continue;
+                    }
+                }
+                Move m;
+                m.startX = piece->getX();
+                m.startY = piece->getY();
+                m.endX = move.first;
+                m.endY = move.second;
+                m.pieceType = piece->getType();
+                m.pieceColor = piece->getColor();
+                moves.push_back(m);
+
+                if (piece->getType() == PieceType::King && std::abs(m.endX - m.startX) == 2)
+                {
+                    std::cout << "Castling move generated: King from (" << m.startX << "," << m.startY << ") to ("
+                              << m.endX << "," << m.endY << ")" << std::endl;
+                }
             }
         }
     }
-
     return moves;
 }

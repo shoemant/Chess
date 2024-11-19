@@ -6,5 +6,5 @@ CXX_DEFINES = -DASSETS_PATH="\"D:/Chess Project/assets\""
 
 CXX_INCLUDES = @CMakeFiles/chess.dir/includes_CXX.rsp
 
-CXX_FLAGS = 
+CXX_FLAGS = -g
 
