@@ -13,10 +13,8 @@ public:
         isSliding_ = false;
     }
 
-    // Copy constructor
     King(const King &other) : Piece(other)
     {
-        // Copy any King-specific data if necessary
     }
 
     virtual std::vector<std::pair<int, int>> getPotentialMoves(const Board &board) const override;

@@ -4,7 +4,7 @@
 #include "../Types.h"
 #include <memory>
 #include <iostream>
-#include "Utilities.h" // Ensure this is included for pieceTypeToString
+#include "Utilities.h"
 
 class Board;
 
@@ -16,12 +16,11 @@ public:
 
     virtual ~Piece() = default;
 
-    // Copy constructor
     Piece(const Piece &other)
         : x_(other.x_), y_(other.y_), color_(other.color_), type_(other.type_),
-          isSliding_(other.isSliding_), hasMoved_(other.hasMoved_) // Correctly copy hasMoved_
+          isSliding_(other.isSliding_), hasMoved_(other.hasMoved_)
     {
-        // Recreate the sprite with the same texture and settings
+
         sprite_.setTexture(*other.sprite_.getTexture());
         sprite_.setTextureRect(other.sprite_.getTextureRect());
         sprite_.setPosition(x_ * 100.f, y_ * 100.f);
