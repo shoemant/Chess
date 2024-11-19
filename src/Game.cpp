@@ -146,7 +146,6 @@ void Game::handleClick(sf::Vector2i mousePos)
                         if (!target)
                         {
                             enPassant = true;
-                            std::cout << "En passant move detected." << std::endl;
                         }
                     }
                 }
@@ -157,7 +156,6 @@ void Game::handleClick(sf::Vector2i mousePos)
                     if (std::abs(dx) == 2)
                     {
                         castling = true;
-                        std::cout << "Castling move detected." << std::endl;
                     }
                 }
 

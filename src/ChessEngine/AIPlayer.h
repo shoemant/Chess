@@ -1,4 +1,3 @@
-// In AIPlayer.h
 #pragma once
 #include "Board.h"
 #include "Types.h"
@@ -11,6 +10,13 @@ struct Move
     PieceColor pieceColor;
     bool isPromotion;
     bool isCapture;
+};
+
+struct TTEntry
+{
+    int depth;
+    int value;
+    int flag;
 };
 
 class AIPlayer

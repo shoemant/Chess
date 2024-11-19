@@ -21,6 +21,19 @@ target_link_libraries(chess sfml-system sfml-window sfml-graphics)
 
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR})
+# Set runtime output to build directory
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
+# Define asset path as a preprocessor definition
 set(ASSETS_PATH "${CMAKE_SOURCE_DIR}/assets")
 add_definitions(-DASSETS_PATH="${ASSETS_PATH}")
+
+# Add custom command to copy the assets folder
+add_custom_target(copy_assets ALL
+    COMMAND ${CMAKE_COMMAND} -E copy_directory
+    ${CMAKE_SOURCE_DIR}/assets ${CMAKE_BINARY_DIR}/assets
+    COMMENT "Copying assets folder to build directory"
+)
+
+# Make sure assets are copied before running the executable
+add_dependencies(chess copy_assets)

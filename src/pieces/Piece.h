@@ -45,7 +45,6 @@ public:
     {
         setPosition(x, y);
         hasMoved_ = true;
-        std::cout << pieceTypeToString(type_) << " has moved to (" << x << ", " << y << "), hasMoved_ = " << (hasMoved_ ? "true" : "false") << std::endl;
     }
 
     bool isSlidingPiece() const { return isSliding_; }

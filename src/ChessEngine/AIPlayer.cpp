@@ -7,7 +7,7 @@
 #include "Utilities.h"
 
 AIPlayer::AIPlayer(PieceColor aiColor)
-    : aiColor_(aiColor), maxDepth_(7)
+    : aiColor_(aiColor), maxDepth_(3)
 {
 }
 
@@ -273,12 +273,6 @@ std::vector<Move> AIPlayer::getAllPossibleMoves(Board &board, PieceColor color, 
                 m.pieceType = piece->getType();
                 m.pieceColor = piece->getColor();
                 moves.push_back(m);
-
-                if (piece->getType() == PieceType::King && std::abs(m.endX - m.startX) == 2)
-                {
-                    std::cout << "Castling move generated: King from (" << m.startX << "," << m.startY << ") to ("
-                              << m.endX << "," << m.endY << ")" << std::endl;
-                }
             }
         }
     }
