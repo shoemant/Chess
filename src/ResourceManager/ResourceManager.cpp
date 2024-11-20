@@ -8,6 +8,7 @@ ResourceManager &ResourceManager::getInstance()
     return instance;
 }
 
+// texture by filename
 sf::Texture &ResourceManager::getTexture(const std::string &filename)
 {
     auto it = textures.find(filename);
@@ -28,6 +29,7 @@ sf::Texture &ResourceManager::getTexture(const std::string &filename)
     }
 }
 
+// font by filename
 sf::Font &ResourceManager::getFont(const std::string &filename)
 {
     auto it = fonts.find(filename);

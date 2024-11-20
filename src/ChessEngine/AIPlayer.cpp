@@ -6,11 +6,13 @@
 #include <iostream>
 #include "Utilities.h"
 
+// constructor
 AIPlayer::AIPlayer(PieceColor aiColor)
     : aiColor_(aiColor), maxDepth_(3)
 {
 }
 
+// get best move for ai
 Move AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     int bestValue = std::numeric_limits<int>::min();
@@ -38,6 +40,7 @@ Move AIPlayer::getBestMove(Board &board, const std::pair<Piece *, std::pair<int,
     return bestMove;
 }
 
+// negamax algorithm with alpha-beta pruning
 int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMultiplier, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     PieceColor currentColor = (colorMultiplier == 1) ? aiColor_ : (aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White);
@@ -62,6 +65,7 @@ int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMul
     int maxEval = std::numeric_limits<int>::min();
     auto possibleMoves = getAllPossibleMoves(board, currentColor, lastMove);
 
+    // sort moves based on heuristic to improve pruning
     sort(possibleMoves.begin(), possibleMoves.end(), [this](const Move &a, const Move &b)
          {
              int scoreA = moveOrderingHeuristic(a);
@@ -98,6 +102,7 @@ int AIPlayer::negamax(Board &board, int depth, int alpha, int beta, int colorMul
     return maxEval;
 }
 
+// heuristic for ordering moves
 int AIPlayer::moveOrderingHeuristic(const Move &move)
 {
     int score = 0;
@@ -114,10 +119,12 @@ int AIPlayer::moveOrderingHeuristic(const Move &move)
     return score;
 }
 
+// evaluate the board state
 int AIPlayer::evaluateBoard(const Board &board)
 {
     int score = 0;
 
+    // define piece values
     const std::unordered_map<PieceType, int> pieceValues = {
         {PieceType::Pawn, 100},
         {PieceType::Knight, 320},
@@ -139,6 +146,8 @@ int AIPlayer::evaluateBoard(const Board &board)
         }
 
         int positionValue = 0;
+
+        // add positional value based on piece type
         switch (piece->getType())
         {
         case PieceType::Pawn:
@@ -184,7 +193,7 @@ int AIPlayer::evaluateBoard(const Board &board)
                 }
             }
         }
-
+        // adjust score based on king's movement
         if (piece->getType() == PieceType::King)
         {
             if (piece->hasMoved())
@@ -208,11 +217,14 @@ int AIPlayer::evaluateBoard(const Board &board)
         }
     }
 
+    // prioritize king safety
     score += evaluateKingSafety(board, aiColor_);
     score -= evaluateKingSafety(board, aiColor_ == PieceColor::White ? PieceColor::Black : PieceColor::White);
 
     return score;
 }
+
+// evaluates king safety based on position, cover, pawn structure
 int AIPlayer::evaluateKingSafety(const Board &board, PieceColor color)
 {
     int safetyScore = 0;
@@ -244,6 +256,7 @@ int AIPlayer::evaluateKingSafety(const Board &board, PieceColor color)
     return safetyScore;
 }
 
+// returns a vector of all possible moves a piece can make
 std::vector<Move> AIPlayer::getAllPossibleMoves(Board &board, PieceColor color, const std::pair<Piece *, std::pair<int, int>> &lastMove)
 {
     std::vector<Move> moves;

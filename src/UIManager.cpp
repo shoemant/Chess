@@ -1,25 +1,25 @@
-
 #include "UIManager.h"
 #include "ResourceManager/ResourceManager.h"
 #include <iostream>
 
+// constructor for uimanager
 UIManager::UIManager()
     : gameOverOverlay(sf::Vector2f(800, 800)),
       playAgainButton(sf::Vector2f(200, 50)),
       exitButton(sf::Vector2f(200, 50))
 {
-    std::cout << "UIManager initialized." << std::endl;
+    std::cout << "uimanager initialized." << std::endl;
 
     gameOverOverlay.setFillColor(sf::Color(0, 0, 0, 150));
 
     try
     {
         font = ResourceManager::getInstance().getFont("assets/arial.ttf");
-        std::cout << "Font loaded successfully." << std::endl;
+        std::cout << "font loaded successfully." << std::endl;
     }
     catch (const std::exception &e)
     {
-        std::cerr << "Error loading font: " << e.what() << std::endl;
+        std::cerr << "error loading font: " << e.what() << std::endl;
     }
 
     gameOverText.setFont(font);
@@ -32,7 +32,7 @@ UIManager::UIManager()
     playAgainButton.setPosition(300, 400);
 
     playAgainText.setFont(font);
-    playAgainText.setString("Play Again");
+    playAgainText.setString("play again");
     playAgainText.setCharacterSize(24);
     playAgainText.setFillColor(sf::Color::White);
 
@@ -45,7 +45,7 @@ UIManager::UIManager()
     exitButton.setPosition(300, 500);
 
     exitText.setFont(font);
-    exitText.setString("Exit");
+    exitText.setString("exit");
     exitText.setCharacterSize(24);
     exitText.setFillColor(sf::Color::White);
 
@@ -55,6 +55,7 @@ UIManager::UIManager()
         exitButton.getPosition().y + (exitButton.getSize().y - exitTextBounds.height) / 2.0f - exitTextBounds.top);
 }
 
+// draw the ui elements
 void UIManager::draw(sf::RenderWindow &window, GameState gameState)
 {
     if (gameState == GameState::GameOver)
@@ -68,9 +69,10 @@ void UIManager::draw(sf::RenderWindow &window, GameState gameState)
     }
 }
 
+// display the game over message
 void UIManager::displayGameOver(const std::string &message)
 {
-    std::cout << "Displaying game over message: " << message << std::endl;
+    std::cout << "displaying game over message: " << message << std::endl;
     gameOverText.setString(message);
 
     sf::FloatRect textBounds = gameOverText.getLocalBounds();
@@ -79,6 +81,7 @@ void UIManager::displayGameOver(const std::string &message)
     gameOverText.setPosition(400, 200);
 }
 
+// handle clicks on game over buttons
 void UIManager::handleGameOverClick(sf::Vector2i mousePos,
                                     std::function<void()> onPlayAgain,
                                     std::function<void()> onExit)
@@ -87,12 +90,12 @@ void UIManager::handleGameOverClick(sf::Vector2i mousePos,
 
     if (playAgainButton.getGlobalBounds().contains(mousePosF))
     {
-        std::cout << "Play Again button clicked." << std::endl;
+        std::cout << "play again button clicked." << std::endl;
         onPlayAgain();
     }
     else if (exitButton.getGlobalBounds().contains(mousePosF))
     {
-        std::cout << "Exit button clicked." << std::endl;
+        std::cout << "exit button clicked." << std::endl;
         onExit();
     }
 }

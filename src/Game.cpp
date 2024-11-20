@@ -1,4 +1,3 @@
-
 #include "Game.h"
 #include "Board.h"
 #include "UIManager.h"
@@ -11,6 +10,7 @@
 #include <iostream>
 #include <algorithm>
 
+// constructor for game
 Game::Game()
     : window(sf::VideoMode(800, 800), "Chess Game"),
       board(),
@@ -23,6 +23,7 @@ Game::Game()
 {
 }
 
+// run the game loop
 void Game::run()
 {
     while (window.isOpen())
@@ -33,6 +34,7 @@ void Game::run()
     }
 }
 
+// update game state
 void Game::update()
 {
     if (aiMoveInProgress && aiFutureMove.wait_for(std::chrono::seconds(0)) == std::future_status::ready)
@@ -42,7 +44,7 @@ void Game::update()
         Piece *pieceToMove = board.getPieceAt(bestMove.startX, bestMove.startY);
         if (!pieceToMove)
         {
-            std::cerr << "Failed to find the piece to move at the expected position." << std::endl;
+            std::cerr << "failed to find the piece to move at the expected position." << std::endl;
             aiMoveInProgress = false;
             return;
         }
@@ -51,7 +53,7 @@ void Game::update()
         if (pieceToMove->getType() == PieceType::King && std::abs(bestMove.endX - bestMove.startX) == 2)
         {
             isCastling = true;
-            std::cout << "AI is attempting to castle.\n";
+            std::cout << "ai is attempting to castle.\n";
         }
 
         board.movePiece(pieceToMove, bestMove.endX, bestMove.endY, false, isCastling);
@@ -61,12 +63,12 @@ void Game::update()
 
         if (board.isKingInCheck(PieceColor::White) && !board.hasValidMoves(PieceColor::White))
         {
-            uiManager.displayGameOver("Checkmate! AI wins!");
+            uiManager.displayGameOver("checkmate! ai wins!");
             gameState = GameState::GameOver;
         }
         else if (!board.hasValidMoves(PieceColor::White))
         {
-            uiManager.displayGameOver("Stalemate! It's a draw!");
+            uiManager.displayGameOver("stalemate! it's a draw!");
             gameState = GameState::GameOver;
         }
         else
@@ -76,6 +78,7 @@ void Game::update()
     }
 }
 
+// process user and system events
 void Game::processEvents()
 {
     sf::Event event;
@@ -91,14 +94,12 @@ void Game::processEvents()
 
             if (gameState == GameState::GameOver)
             {
-
                 uiManager.handleGameOverClick(mousePos, [this]()
                                               { replayGame(); }, [this]()
                                               { exitGame(); });
             }
             else if (!aiMoveInProgress && currentTurn == PieceColor::White && gameState == GameState::Playing)
             {
-
                 handleClick(mousePos);
 
                 if (currentTurn == PieceColor::Black)
@@ -112,6 +113,7 @@ void Game::processEvents()
     }
 }
 
+// handle mouse click events
 void Game::handleClick(sf::Vector2i mousePos)
 {
     if (gameState == GameState::Playing)
@@ -121,7 +123,6 @@ void Game::handleClick(sf::Vector2i mousePos)
 
         if (selectedPiece == nullptr)
         {
-
             Piece *piece = board.getPieceAt(boardX, boardY);
             if (piece && piece->getColor() == currentTurn)
             {
@@ -133,7 +134,6 @@ void Game::handleClick(sf::Vector2i mousePos)
         {
             if (std::find(validMoves.begin(), validMoves.end(), std::make_pair(boardX, boardY)) != validMoves.end())
             {
-
                 bool enPassant = false;
                 bool castling = false;
 
@@ -172,18 +172,18 @@ void Game::handleClick(sf::Vector2i mousePos)
 
                     if (board.isInsufficientMaterial())
                     {
-                        uiManager.displayGameOver("Draw!\nInsufficient material.");
+                        uiManager.displayGameOver("draw!\ninsufficient material.");
                         gameState = GameState::GameOver;
                     }
                     else if (board.isKingInCheck(opponentColor) && !board.hasValidMoves(opponentColor))
                     {
-                        std::string winner = (currentTurn == PieceColor::White) ? "White" : "Black";
-                        uiManager.displayGameOver("Checkmate!\n" + winner + " wins!");
+                        std::string winner = (currentTurn == PieceColor::White) ? "white" : "black";
+                        uiManager.displayGameOver("checkmate!\n" + winner + " wins!");
                         gameState = GameState::GameOver;
                     }
                     else if (!board.hasValidMoves(opponentColor))
                     {
-                        uiManager.displayGameOver("Stalemate!\nIt's a draw!");
+                        uiManager.displayGameOver("stalemate!\nit's a draw!");
                         gameState = GameState::GameOver;
                     }
                     else
@@ -193,13 +193,12 @@ void Game::handleClick(sf::Vector2i mousePos)
                 }
                 catch (const std::exception &e)
                 {
-                    std::cerr << "Error during move: " << e.what() << std::endl;
+                    std::cerr << "error during move: " << e.what() << std::endl;
                 }
             }
             else
             {
-
-                std::cout << "Invalid move attempted." << std::endl;
+                std::cout << "invalid move attempted." << std::endl;
                 selectedPiece = nullptr;
                 validMoves.clear();
             }
@@ -207,6 +206,7 @@ void Game::handleClick(sf::Vector2i mousePos)
     }
 }
 
+// render the game window
 void Game::render()
 {
     window.clear(sf::Color::White);
@@ -215,27 +215,29 @@ void Game::render()
     window.display();
 }
 
+// reset and replay the game
 void Game::replayGame()
 {
-    std::cout << "Replaying the game..." << std::endl;
+    std::cout << "replaying the game..." << std::endl;
     board.initializeBoard();
     currentTurn = PieceColor::White;
     selectedPiece = nullptr;
     validMoves.clear();
     lastMove = {nullptr, {-1, -1}};
     gameState = GameState::Playing;
-    std::cout << "Game has been reset." << std::endl;
+    std::cout << "game has been reset." << std::endl;
 }
 
+// exit the game
 void Game::exitGame()
 {
-    std::cout << "Exiting the game." << std::endl;
+    std::cout << "exiting the game." << std::endl;
     window.close();
 }
 
+// convert move to chess notation
 void Game::toChessNotation(Piece *selectedPiece, int boardX, int boardY)
 {
-
     char type = '\0';
     int rank = boardY + 1;
     char file = 'a' + boardX;
@@ -243,25 +245,24 @@ void Game::toChessNotation(Piece *selectedPiece, int boardX, int boardY)
     switch (selectedPiece->getType())
     {
     case PieceType::Pawn:
-
         break;
     case PieceType::King:
-        type = 'K';
+        type = 'k';
         break;
     case PieceType::Queen:
-        type = 'Q';
+        type = 'q';
         break;
     case PieceType::Rook:
-        type = 'R';
+        type = 'r';
         break;
     case PieceType::Bishop:
-        type = 'B';
+        type = 'b';
         break;
     case PieceType::Knight:
-        type = 'N';
+        type = 'n';
         break;
     default:
-        throw std::invalid_argument("Unknown piece type");
+        throw std::invalid_argument("unknown piece type");
     }
 
     std::string notation;
@@ -275,6 +276,7 @@ void Game::toChessNotation(Piece *selectedPiece, int boardX, int boardY)
     std::cout << notation << std::endl;
 }
 
+// handle AI move
 void Game::handleAIMove()
 {
     auto bestMove = aiPlayer_.getBestMove(board, lastMove);
@@ -282,7 +284,7 @@ void Game::handleAIMove()
     Piece *pieceToMove = board.getPieceAt(bestMove.startX, bestMove.startY);
     if (!pieceToMove)
     {
-        std::cerr << "Failed to find the piece to move at the expected position." << std::endl;
+        std::cerr << "failed to find the piece to move at the expected position." << std::endl;
         return;
     }
 

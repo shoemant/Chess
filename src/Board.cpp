@@ -25,6 +25,7 @@ Board::Board(const Board &other)
     }
 }
 
+// initialize the board with pieces
 void Board::initializeBoard()
 {
 
@@ -118,6 +119,7 @@ void Board::initializeBoard()
         addPiece(PieceType::Pawn, PieceColor::Black, i, 1);
 }
 
+// setup the board graphics
 void Board::setupBoardGraphics()
 {
     for (int row = 0; row < 8; ++row)
@@ -134,6 +136,7 @@ void Board::setupBoardGraphics()
     }
 }
 
+// draw the board and pieces
 void Board::draw(sf::RenderWindow &window, Piece *selectedPiece, const std::vector<std::pair<int, int>> &validMoves)
 {
     for (int row = 0; row < 8; ++row)
@@ -164,6 +167,7 @@ void Board::draw(sf::RenderWindow &window, Piece *selectedPiece, const std::vect
     }
 }
 
+// get piece at specific position
 Piece *Board::getPieceAt(int x, int y) const
 {
     for (const auto &piece : pieces)
@@ -174,6 +178,7 @@ Piece *Board::getPieceAt(int x, int y) const
     return nullptr;
 }
 
+// get valid moves for a piece
 std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::pair<Piece *, std::pair<int, int>> &lastMove) const
 {
     std::vector<std::pair<int, int>> potentialMoves;
@@ -308,6 +313,7 @@ std::vector<std::pair<int, int>> Board::getValidMoves(Piece *piece, const std::p
     return validMoves;
 }
 
+// check if castling is possible
 bool Board::canCastle(PieceColor color, bool isKingSide) const
 {
 
