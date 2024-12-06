@@ -35,7 +35,7 @@ ensuring challenging gameplay. The graphical user interface (GUI) is developed u
 1. Clone the repository
 
 ```
-git clone https://github.com/shoemant/chess-ai-project.git'
+git clone 'https://github.com/shoemant/chess-ai-project.git'
 
 git chess-ai-project
 ```
